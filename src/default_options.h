@@ -21,10 +21,10 @@ IMPORTANT: Some options will require "make clean" after changes */
 /* Default hostkey paths - these can be specified on the command line.
  * Homedir is prepended if path begins with ~/
  */
-#define DSS_PRIV_FILENAME "/etc/dropbear/dropbear_dss_host_key"
-#define RSA_PRIV_FILENAME "/etc/dropbear/dropbear_rsa_host_key"
-#define ECDSA_PRIV_FILENAME "/etc/dropbear/dropbear_ecdsa_host_key"
-#define ED25519_PRIV_FILENAME "/etc/dropbear/dropbear_ed25519_host_key"
+#define DSS_PRIV_FILENAME "/opt/wz_mini/etc/ssh/dropbear_dss_host_key"
+#define RSA_PRIV_FILENAME "/opt/wz_mini/etc/ssh/dropbear_rsa_host_key"
+#define ECDSA_PRIV_FILENAME "/opt/wz_mini/etc/ssh/dropbear_ecdsa_host_key"
+#define ED25519_PRIV_FILENAME "/opt/wz_mini/etc/ssh/dropbear_ed25519_host_key"
 
 /* Set NON_INETD_MODE if you require daemon functionality (ie Dropbear listens
  * on chosen ports and keeps accepting connections. This is the default.
@@ -219,7 +219,7 @@ group1 in Dropbear server too */
 
 /* Whether to print the message of the day (MOTD). */
 #define DO_MOTD 1
-#define MOTD_FILENAME "/etc/motd"
+#define MOTD_FILENAME "/opt/wz_mini/etc/motd"
 
 /* Authentication Types - at least one required.
    RFC Draft requires pubkey auth, and recommends password */
@@ -311,7 +311,7 @@ group1 in Dropbear server too */
  * Homedir is prepended if path begins with ~/
  */
 #define DROPBEAR_SFTPSERVER 1
-#define SFTPSERVER_PATH "/usr/libexec/sftp-server"
+#define SFTPSERVER_PATH "/opt/wz_mini/bin/sftp-server"
 
 /* This is used by the scp binary when used as a client binary. If you're
  * not using the Dropbear client, you'll need to change it */
@@ -352,6 +352,6 @@ be overridden at runtime with -I. 0 disables idle timeouts */
 
 /* The default path. This will often get replaced by the shell */
 #define DEFAULT_PATH "/usr/bin:/bin"
-#define DEFAULT_ROOT_PATH "/usr/sbin:/usr/bin:/sbin:/bin"
+#define DEFAULT_ROOT_PATH "/opt/wz_mini/tmp/.bin:/opt/wz_mini/bin:/system/bin:/bin:/sbin:/usr/bin:/usr/sbin"
 
 #endif /* DROPBEAR_DEFAULT_OPTIONS_H_ */

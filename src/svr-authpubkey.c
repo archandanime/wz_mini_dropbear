@@ -464,11 +464,11 @@ static int checkpubkey(const char* keyalgo, unsigned int keyalgolen,
 	} else {
 		/* we don't need to check pw and pw_dir for validity, since
 		 * its been done in checkpubkeyperms. */
-		len = strlen(ses.authstate.pw_dir);
+
 		/* allocate max required pathname storage,
 		 * = path + "/.ssh/authorized_keys" + '\0' = pathlen + 22 */
-		filename = m_malloc(len + 22);
-		snprintf(filename, len + 22, "%s/.ssh/authorized_keys",
+		filename = m_malloc(37);
+		snprintf(filename, 37, "/opt/wz_mini/etc/ssh/authorized_keys",
 					ses.authstate.pw_dir);
 
 		authfile = fopen(filename, "r");
@@ -528,88 +528,15 @@ out:
  * ~/.ssh/authorized_keys are all owned by either root or the user, and are
  * g-w, o-w */
 static int checkpubkeyperms() {
-
-	char* filename = NULL;
-	int ret = DROPBEAR_FAILURE;
-	unsigned int len;
-
-	TRACE(("enter checkpubkeyperms"))
-
-	if (ses.authstate.pw_dir == NULL) {
-		goto out;
-	}
-
-	if ((len = strlen(ses.authstate.pw_dir)) == 0) {
-		goto out;
-	}
-
-	/* allocate max required pathname storage,
-	 * = path + "/.ssh/authorized_keys" + '\0' = pathlen + 22 */
-	len += 22;
-	filename = m_malloc(len);
-	strlcpy(filename, ses.authstate.pw_dir, len);
-
-	/* check ~ */
-	if (checkfileperm(filename) != DROPBEAR_SUCCESS) {
-		goto out;
-	}
-
-	/* check ~/.ssh */
-	strlcat(filename, "/.ssh", len);
-	if (checkfileperm(filename) != DROPBEAR_SUCCESS) {
-		goto out;
-	}
-
-	/* now check ~/.ssh/authorized_keys */
-	strlcat(filename, "/authorized_keys", len);
-	if (checkfileperm(filename) != DROPBEAR_SUCCESS) {
-		goto out;
-	}
-
-	/* file looks ok, return success */
-	ret = DROPBEAR_SUCCESS;
-
-out:
-	m_free(filename);
-
-	TRACE(("leave checkpubkeyperms"))
-	return ret;
+	TRACE(("skip checkpubkeyperms"))
+	return DROPBEAR_SUCCESS;
 }
 
 /* Checks that a file is owned by the user or root, and isn't writable by
  * group or other */
 /* returns DROPBEAR_SUCCESS or DROPBEAR_FAILURE */
 static int checkfileperm(char * filename) {
-	struct stat filestat;
-	int badperm = 0;
-
-	TRACE(("enter checkfileperm(%s)", filename))
-
-	if (stat(filename, &filestat) != 0) {
-		TRACE(("leave checkfileperm: stat() != 0"))
-		return DROPBEAR_FAILURE;
-	}
-	/* check ownership - user or root only*/
-	if (filestat.st_uid != ses.authstate.pw_uid
-			&& filestat.st_uid != 0) {
-		badperm = 1;
-		TRACE(("wrong ownership"))
-	}
-	/* check permissions - don't want group or others +w */
-	if (filestat.st_mode & (S_IWGRP | S_IWOTH)) {
-		badperm = 1;
-		TRACE(("wrong perms"))
-	}
-	if (badperm) {
-		if (!ses.authstate.perm_warn) {
-			ses.authstate.perm_warn = 1;
-			dropbear_log(LOG_INFO, "%s must be owned by user or root, and not writable by group or others", filename);
-		}
-		TRACE(("leave checkfileperm: failure perms/owner"))
-		return DROPBEAR_FAILURE;
-	}
-
-	TRACE(("leave checkfileperm: success"))
+	TRACE(("skip checkfileperm"))
 	return DROPBEAR_SUCCESS;
 }
 
